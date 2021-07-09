@@ -52,8 +52,27 @@ array.each_with_index do |e,i|
             t = Time.parse(date).to_i
             now = Time.now.to_i
             delta = t - now
+            label = nil
+            count = 0
+            
+            if e =~ /CN=/ then
+                label = e.split("until:")[0].split("CN=")[1].split(",")[0]
+            end
 
-            label = e.split("until:")[0].split("CN=")[1].split(",")[0]
+            if e =~ /OU=/ then
+                label = e.split("until:")[0].split("OU=")[1].split(",")[0]
+            end
+
+            while label == nil do
+                if count > 10000 then
+                    label = "UNKNOWN"
+                end
+                if array[i-count] !~ /CN=/
+                    count = count + 1
+                else
+                    label = array[i-count].split("CN=")[1].split(",")[0]
+                end
+            end
 
             if delta < secondsLeft then
                 printf "Cert (#{label}) Expiring in: #{delta / 86400} days.\n"
@@ -63,7 +82,7 @@ array.each_with_index do |e,i|
             now = Time.now.to_i
             delta = t - now
 
-            label = ""
+            label = nil
             if e =~ /CN=/ then
                 label = e.split("until:")[0].split("CN=")[1].split(",")[0]
             end
