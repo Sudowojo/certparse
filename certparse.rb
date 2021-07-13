@@ -6,6 +6,7 @@ require 'pp'
 # Variables #
 #############
 file = ARGV[0]
+debug = false
 
 #############
 # Functions #
@@ -42,6 +43,7 @@ array.each_with_index do |e,i|
                     label = array[i-count].split(" : ").last.strip
                 end
             end
+            if debug == true then print "\nDEBUG #{e}\n" end
             printf "Cert (#{label}) Expiring in: #{delta / 86400} days.\n"
         end
     end
@@ -75,6 +77,7 @@ array.each_with_index do |e,i|
             end
 
             if delta < secondsLeft then
+                if debug == true then print "\nDEBUG #{e}\n" end
                 printf "Cert (#{label}) Expiring in: #{delta / 86400} days.\n"
             end
         else
@@ -92,6 +95,7 @@ array.each_with_index do |e,i|
             end
 
             if delta < secondsLeft then
+                if debug == true then print "\nDEBUG #{e}\n" end
                 printf "Cert (#{label}) Expiring in: #{delta / 86400} days.\n"
             end
         end
