@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/Users/awojnarek/.rbenv/versions/3.0.0-preview1/bin/ruby
 require 'time'
 require 'pp'
 
@@ -43,6 +43,11 @@ array.each_with_index do |e,i|
                     label = array[i-count].split(" : ").last.strip
                 end
             end
+
+            if label == nil then
+                label = "LINE " + (i+1).to_s + " OF FILE"
+            end 
+            
             if debug == true then print "\nDEBUG #{e}\n" end
             printf "Cert (#{label}) Expiring in: #{delta / 86400} days.\n"
         end
@@ -76,6 +81,10 @@ array.each_with_index do |e,i|
                 end
             end
 
+            if label == nil then
+                label = "LINE " + (i+1).to_s + " OF FILE"
+            end 
+
             if delta < secondsLeft then
                 if debug == true then print "\nDEBUG #{e}\n" end
                 printf "Cert (#{label}) Expiring in: #{delta / 86400} days.\n"
@@ -93,6 +102,22 @@ array.each_with_index do |e,i|
             if e =~ /OU=/ then
                 label = e.split("until:")[0].split("OU=")[1].split(",")[0]
             end
+
+            count = 0
+            while label == nil do
+                if count > 10000 then
+                    label = "UNKNOWN"
+                end
+                if array[i-count] !~ /CN=/
+                    count = count + 1
+                else
+                    label = array[i-count].split("CN=")[1].split(",")[0]
+                end
+            end
+
+            if label == nil then
+                label = "LINE " + (i+1).to_s + " OF FILE"
+            end 
 
             if delta < secondsLeft then
                 if debug == true then print "\nDEBUG #{e}\n" end
