@@ -27,7 +27,7 @@ end
 array = %x[cat #{file}].split("\n")
 
 array.each_with_index do |e,i|
-    if e =~ /To/ then
+    if e =~ /To / then
         date = e.split(" : ").last.strip
         t = Time.parse(date).to_i
         now = Time.now.to_i
